@@ -2,10 +2,16 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的第一个网页</title>
+    <title>点击我示例</title>
+    <script>
+        // 定义一个函数，在点击按钮时触发
+        function showAlert() {
+            alert("恭喜你被我恭喜到了");
+        }
+    </script>
 </head>
 <body>
-    <h1>欢迎来到我的网站</h1>
-    <p>这是我的第一个 HTML 网页。</p>
+    <!-- 按钮元素，点击时调用 showAlert 函数 -->
+    <button onclick="showAlert()">点击我</button>
 </body>
 </html>
