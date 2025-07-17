@@ -1,17 +1,44 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>点击我示例</title>
-    <script>
-        // 定义一个函数，在点击按钮时触发
-        function showAlert() {
-            alert("恭喜你被我恭喜到了");
-        }
-    </script>
+  <meta charset="UTF-8">
+  <title>点击我</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center; /* 水平居中 */
+      align-items: center;      /* 垂直居中 */
+      height: 100vh;            /* 让 body 占满整个视口高度 */
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    #clickMe {
+      font-size: 48px;          /* 调大字体 */
+      color: #007BFF;           /* 蓝色文字 */
+      cursor: pointer;          /* 鼠标悬停时显示手型 */
+      text-decoration: none;    /* 去掉链接的下划线（如果使用a标签） */
+    }
+
+    #clickMe:hover {
+      color: #0056b3;           /* 悬停变深色 */
+    }
+  </style>
 </head>
 <body>
-    <!-- 按钮元素，点击时调用 showAlert 函数 -->
-    <button onclick="showAlert()">点击我</button>
+
+  <!-- 使用普通文字 -->
+  <div id="clickMe" onclick="showAlert()">点击我</div>
+
+  <!-- 或者使用链接 -->
+  <!-- <a id="clickMe" href="javascript:showAlert()">点击我</a> -->
+
+  <script>
+    function showAlert() {
+      alert("恭喜你被我恭喜到了");
+    }
+  </script>
+
 </body>
 </html>
