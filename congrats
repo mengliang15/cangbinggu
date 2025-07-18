@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>恭喜你</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 2em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onclick="checkPassword()">
+    恭喜你被我恭喜到了
+</body>
+
+<script>
+    function checkPassword() {
+        const pwd = prompt("请输入密码查看照片：", "");
+        if (pwd === '54188') {
+            const photo = localStorage.getItem('capturedPhoto');
+            if (photo) {
+                const win = window.open();
+                win.document.write(`<img src="${photo}" style="max-width:100%;max-height:100%;">`);
+            } else {
+                alert("没有找到照片");
+            }
+        } else {
+            alert("密码错误");
+        }
+    }
+</script>
+</html>
