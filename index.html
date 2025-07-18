@@ -1,44 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>点击我</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center; /* 水平居中 */
-      align-items: center;      /* 垂直居中 */
-      height: 100vh;            /* 让 body 占满整个视口高度 */
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-
-    #clickMe {
-      font-size: 48px;          /* 调大字体 */
-      color: #007BFF;           /* 蓝色文字 */
-      cursor: pointer;          /* 鼠标悬停时显示手型 */
-      text-decoration: none;    /* 去掉链接的下划线（如果使用a标签） */
-    }
-
-    #clickMe:hover {
-      color: #0056b3;           /* 悬停变深色 */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>拍照页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        video, canvas, img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- 使用普通文字 -->
-  <div id="clickMe" onclick="showAlert()">点击我</div>
+    <h1>欢迎来到拍照页面</h1>
 
-  <!-- 或者使用链接 -->
-  <!-- <a id="clickMe" href="javascript:showAlert()">点击我</a> -->
+    <button id="captureBtn">点击我</button>
 
-  <script>
-    function showAlert() {
-      alert("恭喜你被我恭喜到了");
-    }
-  </script>
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <img id="photo" alt="拍照预览">
+
+    <input type="password" id="password" placeholder="请输入密码（54188）">
+    <button onclick="checkPassword()">管理员</button>
+
+    <script>
+        const captureBtn = document.getElementById('captureBtn');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const photo = document.getElementById('photo');
+
+        // 请求摄像头权限并播放视频流
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                alert("无法访问摄像头，请允许权限！");
+                console.error("无法获取摄像头权限:", err);
+            });
+
+        // 拍照功能
+        captureBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 将 canvas 的内容转为图片并显示
+            const dataURL = canvas.toDataURL('image/png');
+            photo.src = dataURL;
+
+            // 保存照片到 localStorage
+            localStorage.setItem('capturedPhoto', dataURL);
+
+            alert("恭喜你被我恭喜到了");
+
+            // 停止摄像头
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        });
+
+        // 验证密码并跳转
+        function checkPassword() {
+            const pwd = document.getElementById('password').value;
+            if (pwd === '54188') {
+                window.location.href = 'photos.html';
+            } else {
+                alert("密码错误，请重试！");
+            }
+        }
+    </script>
 
 </body>
 </html>
