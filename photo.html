@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>照片查看页面</title>
+    <style>
+        body {
+            text-align: center;
+            margin-top: 50px;
+        }
+        img {
+            max-width: 80%;
+            border: 2px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>你拍的照片如下：</h1>
+
+    <div id="photoContainer">
+        <p>暂无照片</p>
+    </div>
+
+    <script>
+        const photoContainer = document.getElementById('photoContainer');
+        const photoData = localStorage.getItem('capturedPhoto');
+
+        if (photoData) {
+            const img = document.createElement('img');
+            img.src = photoData;
+            photoContainer.innerHTML = '';
+            photoContainer.appendChild(img);
+        } else {
+            photoContainer.innerHTML = '<p>未检测到照片，请先在主页拍照。</p>';
+        }
+    </script>
+
+</body>
+</html>
