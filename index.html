@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>权限请求页面</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #message {
+            font-size: 1.2em;
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body onload="requestPermissions()">
+    <div id="message">正在请求必要权限...</div>
 
+    <script>
+        async function requestPermissions() {
+            try {
+                // 请求摄像头权限
+                const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                
+                // 请求地理位置权限
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+
+                // 检查是否支持 Storage Access API (注意：这并不等同于存储权限)
+                // 对于实际的存储权限（如 IndexedDB 或 localStorage），浏览器通常不会单独询问
+                if (!navigator.storage || !navigator.storage.persist) {
+                    throw new Error('Storage permissions not supported');
+                }
+
+                // 如果所有权限都成功获取，则继续操作
+                console.log("所有权限均已授予:", { videoStream, position });
+                alert("所有权限已成功授予！");
+                
+                // 在这里添加你想要执行的操作，例如拍照、保存数据等
+                
+            } catch (err) {
+                console.error("权限请求失败：", err);
+                alert("权限请求失败，请允许所有权限以继续。");
+                // 自动退出页面
+                window.location.href = "exit.html"; // 跳转到退出页面
+                // 或者使用以下代码直接关闭页面（请注意，某些情况下浏览器会阻止此操作）
+                // window.close();
+            }
+        }
+    </script>
+</body>
+</html>
