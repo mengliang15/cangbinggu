@@ -2,11 +2,11 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>请输入你的姓名</title>
+  <title>爱你 ❤</title>
   <style>
     body {
-      background: linear-gradient(to right, #ffe0f0, #fff0f5);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #fcd3e1);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -15,8 +15,10 @@
       margin: 0;
       text-align: center;
     }
-    h2 {
-      color: #ff69b4;
+    #inputArea {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     input[type="text"] {
       padding: 10px;
@@ -40,21 +42,52 @@
     button:hover {
       background-color: #e055a1;
     }
+    #resultArea {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #ff3366;
+      font-size: 3em;
+    }
+    .heart {
+      font-size: 2em;
+      color: #ff69b4;
+      margin-top: 10px;
+      animation: beat 1s infinite;
+    }
+    @keyframes beat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
-  <h2>请输入你的姓名：</h2>
-  <input type="text" id="nameInput" placeholder="">
-  <button onclick="goToNextPage()">确定</button>
+  <div id="inputArea">
+    <h2>请输入你的姓名：</h2>
+    <input type="text" id="nameInput" placeholder="">
+    <button onclick="showLove()">确定</button>
+  </div>
+
+  <div id="resultArea">
+    <h1>爱你，<span id="displayName"></span> ❤</h1>
+    <div class="heart">💗</div>
+  </div>
 
   <script>
-    function goToNextPage() {
+    function showLove() {
       const name = document.getElementById("nameInput").value.trim();
       if (name === "") {
         alert("请输入姓名哦~");
         return;
       }
-      window.location.href = "love.html?name=" + encodeURIComponent(name);
+
+      document.getElementById("inputArea").style.display = "none";
+      document.getElementById("resultArea").style.display = "flex";
+
+      document.getElementById("displayName").textContent = name;
     }
   </script>
 </body>
