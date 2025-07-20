@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>请输入你的姓名</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #ffe0f0, #fff0f5);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    h2 {
+      color: #ff69b4;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+      border: 2px solid #ff69b4;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #e055a1;
+    }
+  </style>
+</head>
+<body>
+  <h2>请输入你的姓名：</h2>
+  <input type="text" id="nameInput" placeholder="">
+  <button onclick="goToNextPage()">确定</button>
+
+  <script>
+    function goToNextPage() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (name === "") {
+        alert("请输入姓名哦~");
+        return;
+      }
+      window.location.href = "love.html?name=" + encodeURIComponent(name);
+    }
+  </script>
+</body>
+</html>
